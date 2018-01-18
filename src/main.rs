@@ -13,7 +13,6 @@ use editor::{Editor, Mode};
 fn main() {
     let mut ed = Editor::new();
     ed.reset();
-    ed.flush();
 
     for key in io::stdin().keys() {
         let key = key.unwrap();
@@ -25,7 +24,6 @@ fn main() {
         if key == Key::Ctrl('c') {
             break;
         }
-        ed.flush();
     }
 
     ed.reset();

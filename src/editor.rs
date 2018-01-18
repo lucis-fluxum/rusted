@@ -32,15 +32,16 @@ impl Editor {
         self.print(clear::All);
     }
 
-    pub fn flush(&mut self) {
-        self.output.flush().unwrap();
-    }
-
     pub fn cursor(&mut self) -> Cursor {
         Cursor { editor: self }
     }
 
     pub fn print<T: Display>(&mut self, item: T) {
         write!(self.output, "{}", item).unwrap();
+        self.flush();
+    }
+
+    fn flush(&mut self) {
+        self.output.flush().unwrap();
     }
 }
