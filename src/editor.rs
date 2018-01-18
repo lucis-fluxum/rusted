@@ -29,7 +29,7 @@ impl Editor {
     }
 
     pub fn clear(&mut self) {
-        write!(self.output, "{}", clear::All).unwrap();
+        self.print(clear::All);
     }
 
     pub fn flush(&mut self) {
