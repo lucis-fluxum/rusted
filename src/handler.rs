@@ -1,5 +1,4 @@
 use std::io::Write;
-use termion::cursor::*;
 use termion::event::Key;
 
 use editor::{Editor, Mode};
@@ -17,20 +16,20 @@ pub fn normal_mode_key(key: &Key, ed: &mut Editor) {
         Key::Char('i') => {
             ed.mode = Mode::Insert;
         }
-        Key::Char('h') => write!(ed.output, "{}", Left(1)).unwrap(),
-        Key::Char('l') => write!(ed.output, "{}", Right(1)).unwrap(),
-        Key::Char('k') => write!(ed.output, "{}", Up(1)).unwrap(),
-        Key::Char('j') => write!(ed.output, "{}", Down(1)).unwrap(),
+        Key::Char('h') => ed.cursor().left(1),
+        Key::Char('l') => ed.cursor().right(1),
+        Key::Char('k') => ed.cursor().up(1),
+        Key::Char('j') => ed.cursor().down(1),
         _ => {}
     }
 }
 
 pub fn any_mode_key(key: &Key, ed: &mut Editor) {
     match *key {
-        Key::Left => write!(ed.output, "{}", Left(1)).unwrap(),
-        Key::Right => write!(ed.output, "{}", Right(1)).unwrap(),
-        Key::Up => write!(ed.output, "{}", Up(1)).unwrap(),
-        Key::Down => write!(ed.output, "{}", Down(1)).unwrap(),
+        Key::Left => ed.cursor().left(1),
+        Key::Right => ed.cursor().right(1),
+        Key::Up => ed.cursor().up(1),
+        Key::Down => ed.cursor().down(1),
         Key::Esc => {
             ed.mode = Mode::Normal;
         }
