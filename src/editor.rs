@@ -28,10 +28,6 @@ impl Editor {
         self.cursor().goto(1, 1);
     }
 
-    pub fn clear(&mut self) {
-        self.print(clear::All);
-    }
-
     pub fn cursor(&mut self) -> Cursor {
         Cursor { editor: self }
     }
@@ -43,5 +39,9 @@ impl Editor {
 
     fn flush(&mut self) {
         self.output.flush().unwrap();
+    }
+
+    fn clear(&mut self) {
+        self.print(clear::All);
     }
 }
