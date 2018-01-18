@@ -13,9 +13,8 @@ use mode::Mode;
 
 fn main() {
     let mut ed = Editor::new();
-    ed.clear();
-    ed.goto(1, 1);
-    ed.output.flush().unwrap();
+    ed.reset();
+    ed.flush();
 
     for c in stdin().keys() {
         let c = c.unwrap();
@@ -27,9 +26,8 @@ fn main() {
         if c == Key::Ctrl('c') {
             break;
         }
-        ed.output.flush().unwrap();
+        ed.flush();
     }
 
-    ed.clear();
-    ed.goto(1, 1);
+    ed.reset();
 }
