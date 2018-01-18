@@ -1,9 +1,13 @@
 use std::io::{stdout, Stdout, Write};
 use termion::raw::{IntoRawMode, RawTerminal};
 use termion::clear;
-use termion::cursor::Goto;
 
-use mode::Mode;
+use cursor::Cursor;
+
+pub enum Mode {
+    Normal,
+    Insert,
+}
 
 pub struct Editor {
     pub mode: Mode,
@@ -20,18 +24,18 @@ impl Editor {
 
     pub fn reset(&mut self) {
         self.clear();
-        self.goto(1, 1);
+        self.cursor().goto(1, 1);
     }
 
     pub fn clear(&mut self) {
         write!(self.output, "{}", clear::All).unwrap();
     }
 
-    pub fn goto(&mut self, x: u16, y: u16) {
-        write!(self.output, "{}", Goto(x, y)).unwrap();
-    }
-
     pub fn flush(&mut self) {
         self.output.flush().unwrap();
+    }
+
+    pub fn cursor(&mut self) -> Cursor {
+        Cursor { editor: self }
     }
 }

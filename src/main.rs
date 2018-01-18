@@ -2,14 +2,14 @@ extern crate termion;
 
 mod mode;
 mod editor;
+mod cursor;
 mod handler;
 
 use std::io;
 use termion::event::Key;
 use termion::input::TermRead;
 
-use editor::Editor;
-use mode::Mode;
+use editor::{Editor, Mode};
 
 fn main() {
     let mut ed = Editor::new();

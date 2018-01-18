@@ -2,8 +2,7 @@ use std::io::Write;
 use termion::cursor::*;
 use termion::event::Key;
 
-use editor::Editor;
-use mode::Mode;
+use editor::{Editor, Mode};
 
 pub fn insert_mode_key(key: &Key, ed: &mut Editor) {
     match *key {
