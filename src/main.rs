@@ -4,7 +4,7 @@ mod mode;
 mod editor;
 mod handler;
 
-use std::io::{stdin, Write};
+use std::io;
 use termion::event::Key;
 use termion::input::TermRead;
 
@@ -16,14 +16,14 @@ fn main() {
     ed.reset();
     ed.flush();
 
-    for c in stdin().keys() {
-        let c = c.unwrap();
+    for key in io::stdin().keys() {
+        let key = key.unwrap();
         match ed.mode {
-            Mode::Normal => handler::normal_mode_key(&c, &mut ed),
-            Mode::Insert => handler::insert_mode_key(&c, &mut ed),
+            Mode::Normal => handler::normal_mode_key(&key, &mut ed),
+            Mode::Insert => handler::insert_mode_key(&key, &mut ed),
         }
-        handler::any_mode_key(&c, &mut ed);
-        if c == Key::Ctrl('c') {
+        handler::any_mode_key(&key, &mut ed);
+        if key == Key::Ctrl('c') {
             break;
         }
         ed.flush();
