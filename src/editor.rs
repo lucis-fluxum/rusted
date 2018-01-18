@@ -1,4 +1,5 @@
 use std::io::{stdout, Stdout, Write};
+use std::fmt::Display;
 use termion::raw::{IntoRawMode, RawTerminal};
 use termion::clear;
 
@@ -37,5 +38,9 @@ impl Editor {
 
     pub fn cursor(&mut self) -> Cursor {
         Cursor { editor: self }
+    }
+
+    pub fn print<T: Display>(&mut self, item: T) {
+        write!(self.output, "{}", item).unwrap();
     }
 }
