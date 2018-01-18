@@ -8,13 +8,16 @@ use cursor::Cursor;
 pub enum Mode {
     Normal,
     Insert,
+    // TODO: Visual mode, selectable regions, copy/paste, etc
 }
 
 pub struct Editor {
     pub mode: Mode,
     pub output: RawTerminal<Stdout>,
+    // TODO: Add positional information (origin, width, height)
 }
 
+// TODO: Initialization with background/foreground colors
 impl Editor {
     pub fn new() -> Editor {
         Editor {
