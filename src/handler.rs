@@ -17,6 +17,10 @@ pub fn normal_mode_key(key: &Key, ed: &mut Editor) {
         Key::Char('i') => {
             ed.mode = Mode::Insert;
         }
+        Key::Char('h') => write!(ed.output, "{}", Left(1)).unwrap(),
+        Key::Char('l') => write!(ed.output, "{}", Right(1)).unwrap(),
+        Key::Char('k') => write!(ed.output, "{}", Up(1)).unwrap(),
+        Key::Char('j') => write!(ed.output, "{}", Down(1)).unwrap(),
         _ => {}
     }
 }
