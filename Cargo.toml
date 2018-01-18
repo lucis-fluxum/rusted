@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["Luc Street <lucis-fluxum@users.noreply.github.com>"]
 
 [dependencies]
+termion = "*"
