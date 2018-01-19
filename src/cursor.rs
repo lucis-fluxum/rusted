@@ -7,6 +7,10 @@ pub struct Cursor<'a> {
 }
 
 impl<'a> Cursor<'a> {
+    pub fn pos(&mut self) -> (u16, u16) {
+        self.editor.output.cursor_pos().unwrap()
+    }
+
     pub fn goto(&mut self, x: u16, y: u16) {
         self.editor.print(Goto(x, y));
     }
