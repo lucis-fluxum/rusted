@@ -1,3 +1,5 @@
+mod movement;
+
 use termion::event::Key;
 
 use editor::{Editor, Mode};
@@ -11,24 +13,18 @@ pub fn insert_mode_key(key: &Key, editor: &mut Editor) {
 }
 
 pub fn normal_mode_key(key: &Key, editor: &mut Editor) {
+    movement::do_vim_move(key, editor);
     match *key {
         Key::Char('i') => {
             editor.mode = Mode::Insert;
         }
-        Key::Char('h') => editor.cursor().left(1),
-        Key::Char('l') => editor.cursor().right(1),
-        Key::Char('k') => editor.cursor().up(1),
-        Key::Char('j') => editor.cursor().down(1),
         _ => {}
     }
 }
 
 pub fn any_mode_key(key: &Key, editor: &mut Editor) {
+    movement::do_arrow_key_move(key, editor);
     match *key {
-        Key::Left => editor.cursor().left(1),
-        Key::Right => editor.cursor().right(1),
-        Key::Up => editor.cursor().up(1),
-        Key::Down => editor.cursor().down(1),
         Key::Esc => {
             editor.mode = Mode::Normal;
         }
