@@ -3,8 +3,6 @@ use std::fmt::Display;
 use termion::raw::{IntoRawMode, RawTerminal};
 use termion::clear;
 
-use cursor::Cursor;
-
 pub enum Mode {
     Normal,
     Insert,
@@ -35,11 +33,7 @@ impl Editor {
 
     pub fn reset(&mut self) {
         self.clear();
-        self.cursor().goto(0, 0);
-    }
-
-    pub fn cursor(&mut self) -> Cursor {
-        Cursor { editor: self }
+        self.goto(0, 0);
     }
 
     pub fn print<T: Display>(&mut self, item: T) {
