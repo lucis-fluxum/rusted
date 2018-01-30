@@ -2,7 +2,7 @@ extern crate termion;
 
 mod editor;
 mod cursor;
-mod handler;
+mod action;
 
 use std::io;
 use termion::event::Key;
@@ -17,10 +17,10 @@ fn main() {
     for key in io::stdin().keys() {
         let key = key.unwrap();
         match ed.mode {
-            Mode::Normal => handler::normal_mode_key(&key, &mut ed),
-            Mode::Insert => handler::insert_mode_key(&key, &mut ed),
+            Mode::Normal => action::normal_mode_key(&key, &mut ed),
+            Mode::Insert => action::insert_mode_key(&key, &mut ed),
         }
-        handler::any_mode_key(&key, &mut ed);
+        action::any_mode_key(&key, &mut ed);
         if key == Key::Ctrl('c') {
             break;
         }
