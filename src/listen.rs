@@ -20,18 +20,9 @@ pub fn respond_to_keys(mut editor: Editor) {
 
 pub fn insert_mode_key(key: &Key, editor: &mut Editor) {
     match *key {
-        Key::Char(c) => {
-            editor.insert_char(c);
-            editor.print(c);
-        }
-        Key::Backspace => {
-            editor.backspace();
-            editor.print("\x08 \x08");
-        }
-        Key::Delete => {
-            editor.delete_char();
-            editor.print(" \x08");
-        }
+        Key::Char(c) => editor.insert_char(c),
+        Key::Backspace => editor.backspace(),
+        Key::Delete => editor.delete_char(),
         _ => {}
     }
 }
