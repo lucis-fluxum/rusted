@@ -1,6 +1,6 @@
 use termion::event::Key;
 
-use editor::{Editor, Mode};
+use editor::Editor;
 
 pub fn do_vim_move(key: &Key, editor: &mut Editor) {
     match *key {

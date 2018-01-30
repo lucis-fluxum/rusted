@@ -22,12 +22,14 @@ pub struct Editor {
 // TODO: Initialization with background/foreground colors
 impl Editor {
     pub fn new() -> Editor {
-        Editor {
+        let mut e = Editor {
             mode: Mode::Normal,
             output: stdout().into_raw_mode().unwrap(),
             x: 0,
             y: 0,
-        }
+        };
+        e.reset();
+        e
     }
 
     pub fn reset(&mut self) {
@@ -46,5 +48,11 @@ impl Editor {
 
     fn clear(&mut self) {
         self.print(clear::All);
+    }
+}
+
+impl Drop for Editor {
+    fn drop(&mut self) {
+        self.reset();
     }
 }
