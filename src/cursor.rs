@@ -9,7 +9,7 @@ pub struct Cursor<'a> {
 // TODO: Scrolling when traveling up or down
 // TODO: Jumping to next/previous lines when moving right or left
 impl<'a> Cursor<'a> {
-    pub fn pos(&mut self) -> (u16, u16) {
+    pub fn pos(&mut self) -> (usize, usize) {
         // TODO: Use cursor_pos function once
         // https://github.com/ticki/termion/issues/136 is fixed
         // self.editor.output.cursor_pos().unwrap()
@@ -17,13 +17,13 @@ impl<'a> Cursor<'a> {
     }
 
     // (0, 0)-based movement, instead of (1, 1)-based.
-    pub fn goto(&mut self, x: u16, y: u16) {
+    pub fn goto(&mut self, x: usize, y: usize) {
         self.editor.x = x;
         self.editor.y = y;
-        self.editor.print(Goto(x + 1, y + 1));
+        self.editor.print(Goto(x as u16 + 1, y as u16 + 1));
     }
 
-    pub fn left(&mut self, n: u16) {
+    pub fn left(&mut self, n: usize) {
         let (x, y) = self.pos();
         // Don't move past the left edge of the terminal
         if n <= x {
@@ -33,14 +33,14 @@ impl<'a> Cursor<'a> {
         }
     }
 
-    pub fn right(&mut self, n: u16) {
+    pub fn right(&mut self, n: usize) {
         let (x, y) = self.pos();
         // Depending on mode, do/don't move past the end of the line
         // Move to next line if possible
         self.goto(x + n, y);
     }
 
-    pub fn up(&mut self, n: u16) {
+    pub fn up(&mut self, n: usize) {
         let (x, y) = self.pos();
         // Don't move past the top of the terminal
         if n <= y {
@@ -50,7 +50,7 @@ impl<'a> Cursor<'a> {
         }
     }
 
-    pub fn down(&mut self, n: u16) {
+    pub fn down(&mut self, n: usize) {
         let (x, y) = self.pos();
         self.goto(x, y + n);
     }

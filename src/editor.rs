@@ -14,8 +14,9 @@ pub enum Mode {
 pub struct Editor {
     pub mode: Mode,
     pub output: RawTerminal<Stdout>,
-    pub x: u16,
-    pub y: u16,
+    pub buffer: Vec<String>,
+    pub x: usize,
+    pub y: usize,
     // TODO: Add positional information (origin, width, height)
 }
 
@@ -25,6 +26,7 @@ impl Editor {
         let mut e = Editor {
             mode: Mode::Normal,
             output: stdout().into_raw_mode().unwrap(),
+            buffer: vec![String::new()],
             x: 0,
             y: 0,
         };
@@ -50,13 +52,35 @@ impl Editor {
         self.mode = mode;
     }
 
+    pub fn insert_char(&mut self, c: char) {
+        let (x, y) = self.cursor().pos();
+        self.buffer[y].insert_str(x, &c.to_string());
+        self.x += 1;
+    }
+
+    pub fn delete_char(&mut self) {
+        let (x, y) = self.cursor().pos();
+        self.buffer[y].remove(x);
+    }
+
+    pub fn backspace(&mut self) {
+        let (x, y) = self.cursor().pos();
+        if x > 0 {
+            self.buffer[y].remove(x - 1);
+            self.x -= 1;
+        }
+    }
+
     fn clear(&mut self) {
+        self.buffer.clear();
+        self.buffer.push(String::new());
         self.print(clear::All);
     }
 }
 
 impl Drop for Editor {
     fn drop(&mut self) {
-        self.reset();
+        println!("{:?}", self.buffer);
+        // self.reset();
     }
 }
