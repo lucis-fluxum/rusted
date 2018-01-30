@@ -27,8 +27,12 @@ impl Editor {
             x: 0,
             y: 0,
         };
-        e.reset();
+        e.init();
         e
+    }
+
+    fn init(&mut self) {
+        self.reset();
     }
 
     pub fn reset(&mut self) {

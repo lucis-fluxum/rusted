@@ -31,7 +31,7 @@ impl Editor {
 
     pub fn right(&mut self, n: usize) {
         let (x, y) = self.pos();
-        // Depending on mode, do/don't move past the end of the line
+        // TODO: Depending on mode, do/don't move past the end of the line
         // Move to next line if possible
         self.goto(x + n, y);
     }
