@@ -18,7 +18,7 @@ impl Editor {
         }
     }
 
-    pub fn insert_mode_key(&mut self, key: &Key) {
+    fn insert_mode_key(&mut self, key: &Key) {
         match *key {
             Key::Char(c) => self.insert_char(c),
             Key::Backspace => self.backspace(),
@@ -27,7 +27,7 @@ impl Editor {
         }
     }
 
-    pub fn normal_mode_key(&mut self, key: &Key) {
+    fn normal_mode_key(&mut self, key: &Key) {
         self.do_vim_move(key);
         match *key {
             Key::Char('i') => self.set_mode(Mode::Insert),
@@ -35,7 +35,7 @@ impl Editor {
         }
     }
 
-    pub fn any_mode_key(&mut self, key: &Key) {
+    fn any_mode_key(&mut self, key: &Key) {
         self.do_arrow_key_move(key);
         match *key {
             Key::Esc => self.set_mode(Mode::Normal),
