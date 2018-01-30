@@ -14,6 +14,8 @@ pub enum Mode {
 pub struct Editor {
     pub mode: Mode,
     pub output: RawTerminal<Stdout>,
+    pub x: u16,
+    pub y: u16,
     // TODO: Add positional information (origin, width, height)
 }
 
@@ -23,12 +25,14 @@ impl Editor {
         Editor {
             mode: Mode::Normal,
             output: stdout().into_raw_mode().unwrap(),
+            x: 0,
+            y: 0,
         }
     }
 
     pub fn reset(&mut self) {
         self.clear();
-        self.cursor().goto(1, 1);
+        self.cursor().goto(0, 0);
     }
 
     pub fn cursor(&mut self) -> Cursor {
@@ -37,10 +41,6 @@ impl Editor {
 
     pub fn print<T: Display>(&mut self, item: T) {
         write!(self.output, "{}", item).unwrap();
-        self.flush();
-    }
-
-    fn flush(&mut self) {
         self.output.flush().unwrap();
     }
 
