@@ -46,6 +46,10 @@ impl Editor {
         self.output.flush().unwrap();
     }
 
+    pub fn set_mode(&mut self, mode: Mode) {
+        self.mode = mode;
+    }
+
     fn clear(&mut self) {
         self.print(clear::All);
     }
