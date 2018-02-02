@@ -35,12 +35,21 @@ impl Editor {
         self.refresh_line();
     }
 
-    fn refresh_line(&mut self) {
+    pub fn refresh_line(&mut self) {
         let (x, y) = self.pos();
         let line = self.buffer[y].clone();
         self.goto(0, y);
         self.print(clear::CurrentLine);
         self.print(line);
         self.right(x);
+    }
+
+    pub fn refresh_all(&mut self) {
+        let (x, y) = self.pos();
+        for i in 0..self.buffer.len() {
+            self.goto(0, i);
+            self.refresh_line();
+        }
+        self.goto(x, y);
     }
 }
