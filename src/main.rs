@@ -1,7 +1,6 @@
 extern crate termion;
 
 mod editor;
-mod cursor;
 mod action;
 mod listen;
 
