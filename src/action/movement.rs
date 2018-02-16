@@ -26,36 +26,29 @@ impl Editor {
         if n <= x {
             self.goto(x - n, y);
         } else if y > 0 {
-            // Normal mode: last char of previous line
-            // Insert mode: one beyond the last char
-            let end = match self.mode {
-                Mode::Normal => self.buffer[y - 1].len() - 1,
-                Mode::Insert => self.buffer[y - 1].len(),
-            };
+            // Previous line exists, calculate leftover movement
+            let leftover = n - x - 1;
 
-            // Move to end of previous line instead
-            self.goto(end, y - 1);
+            // Skip to previous line and move leftover amount
+            // Also skips to line above that, if needed.
+            let end_of_prev_line = self.get_end_of_line(y - 1);
+            self.goto(end_of_prev_line, y - 1);
+            self.left(leftover);
+        } else {
+            // We're on the first line trying to move too far left.
+            self.goto(0, 0);
         }
     }
 
     pub fn right(&mut self, n: usize) {
         let (x, y) = self.pos();
-        let current_line_len = self.buffer[y].len();
+        let end_of_current_line = self.get_end_of_line(y);
 
-        // Depending on mode, do or don't move past the end of the line
-        let regular_move = match self.mode {
-            Mode::Normal => x + n < current_line_len,
-            Mode::Insert => x + n <= current_line_len,
-        };
-
-        if regular_move {
+        if x + n <= end_of_current_line {
             self.goto(x + n, y);
         } else if y + 1 < self.buffer.len() {
             // Next line exists, calculate leftover movement
-            let leftover = match self.mode {
-                Mode::Normal => n - (current_line_len - x),
-                Mode::Insert => n - (current_line_len - x) - 1,
-            };
+            let leftover = n - (end_of_current_line - x) - 1;
 
             // Skip to next line and move leftover amount
             // This also skips to the line after, if needed.
@@ -68,7 +61,12 @@ impl Editor {
         let (x, y) = self.pos();
         // Don't move past the top of the terminal
         if n <= y {
-            self.goto(x, y - n);
+            let end_of_above_line = self.get_end_of_line(y - n);
+            if x > end_of_above_line {
+                self.goto(end_of_above_line, y - n);
+            } else {
+                self.goto(x, y - n);
+            }
         } else {
             // Scroll if possible
         }
@@ -77,5 +75,14 @@ impl Editor {
     pub fn down(&mut self, n: usize) {
         let (x, y) = self.pos();
         self.goto(x, y + n);
+    }
+
+    // Normal mode: last char of previous line
+    // Insert mode: one beyond the last char
+    fn get_end_of_line(&self, n: usize) -> usize {
+        match self.mode {
+            Mode::Normal => self.buffer[n].len() - 1,
+            Mode::Insert => self.buffer[n].len(),
+        }
     }
 }
