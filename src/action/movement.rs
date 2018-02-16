@@ -113,8 +113,8 @@ impl Editor {
     /// Determine the ending position of a given line, depending on the current
     /// mode.
     ///
-    /// For normal mode: last char of previous line.
-    /// For insert mode: one beyond the last char of previous line.
+    /// For normal mode: last character of the line.
+    /// For insert mode: one beyond the last character of the line.
     fn get_end_of_line(&self, n: usize) -> usize {
         match self.mode {
             Mode::Normal => self.buffer[n].len() - 1,
