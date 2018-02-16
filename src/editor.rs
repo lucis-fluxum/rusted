@@ -18,6 +18,8 @@ pub struct Editor {
 }
 
 // TODO: Initialization with background/foreground colors
+// TODO: Preserve terminal state before launch, restore on exit
+// TODO: Status messages and prompts at bottom
 impl Editor {
     pub fn new() -> Editor {
         let mut e = Editor {
