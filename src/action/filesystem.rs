@@ -5,7 +5,7 @@ use std::fs::File;
 use editor::Editor;
 
 impl Editor {
-    /// Load the content of a file into the buffer, overwriting the current
+    /// Load the contents of a file into the buffer, overwriting the current
     /// contents of the buffer.
     pub fn load(&mut self, filename: &str) {
         // TODO: Persist the reader within an editor, only read when needed
