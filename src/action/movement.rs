@@ -4,7 +4,6 @@ use editor::Editor;
 use editor::Mode;
 
 // TODO: Scrolling when traveling up or down
-// TODO: Jumping back to end of line when moving up/down from longer line
 impl Editor {
     pub fn pos(&mut self) -> (usize, usize) {
         // TODO: Use cursor_pos function once
@@ -74,7 +73,17 @@ impl Editor {
 
     pub fn down(&mut self, n: usize) {
         let (x, y) = self.pos();
-        self.goto(x, y + n);
+
+        if y + n < self.buffer.len() {
+            let end_of_below_line = self.get_end_of_line(y + n);
+            if x > end_of_below_line {
+                self.goto(end_of_below_line, y + n);
+            } else {
+                self.goto(x, y + n);
+            }
+        } else {
+            // Scroll if possible
+        }
     }
 
     // Normal mode: last char of previous line
