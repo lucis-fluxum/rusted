@@ -37,9 +37,16 @@ impl Editor {
 
     fn any_mode_key(&mut self, key: &Key) {
         self.do_arrow_key_move(key);
+        let (x, y) = self.pos();
+        let line_length = self.buffer[y].len();
         match *key {
-            // TODO: Move left 1 char if we're off the end of a line
-            Key::Esc => self.set_mode(Mode::Normal),
+            Key::Esc => {
+                // TODO: Move to movement module
+                self.set_mode(Mode::Normal);
+                if line_length > 0 && x == line_length {
+                    self.left(1);
+                }
+            }
             _ => {}
         }
     }

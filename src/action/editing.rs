@@ -24,6 +24,7 @@ impl Editor {
         self.refresh_line();
     }
 
+    // TODO: Deleting one after the end of a line should join it with the line below
     /// Delete the character under the cursor.
     pub fn delete_char(&mut self) {
         let (x, y) = self.pos();
