@@ -18,7 +18,7 @@ impl Editor {
     /// exists.
     pub fn save(&self, filename: &str) {
         let mut writer = LineWriter::new(File::create(filename).unwrap());
-        for line in self.buffer.iter() {
+        for line in &self.buffer {
             write!(writer, "{}\n", line).unwrap();
         }
     }
