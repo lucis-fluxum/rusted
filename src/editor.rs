@@ -6,6 +6,7 @@ use termion::clear;
 pub enum Mode {
     Normal,
     Insert,
+    Command,
     // TODO: Visual mode, selectable regions, copy/paste, etc
 }
 
@@ -15,6 +16,7 @@ pub struct Editor {
     pub buffer: Vec<String>,
     pub x: usize,
     pub y: usize,
+    pub command: String,
 }
 
 // TODO: Initialization with background/foreground colors
@@ -28,6 +30,7 @@ impl Editor {
             buffer: vec![String::new()],
             x: 0,
             y: 0,
+            command: String::new(),
         };
         e.init();
         e
@@ -49,6 +52,10 @@ impl Editor {
 
     pub fn set_mode(&mut self, mode: Mode) {
         self.mode = mode;
+        match self.mode {
+            Mode::Command => self.setup_command_line(),
+            _ => {}
+        }
     }
 
     fn clear(&mut self) {

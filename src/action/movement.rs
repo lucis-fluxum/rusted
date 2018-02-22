@@ -121,6 +121,7 @@ impl Editor {
             Mode::Normal if len == 0 => len,
             Mode::Normal => len - 1,
             Mode::Insert => len,
+            _ => unreachable!(),
         }
     }
 }
