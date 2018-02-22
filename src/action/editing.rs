@@ -10,17 +10,26 @@ impl Editor {
     pub fn insert_char(&mut self, c: char) {
         let (x, y) = self.pos();
         let c = c.to_string();
-        // TODO: Handle whitespace somewhere else
-        match c.as_str() {
-            "\n" => {
-                self.goto(0, y + 1);
-                self.buffer.push(String::new());
+        match self.mode {
+            Mode::Insert | Mode::Normal => {
+                // TODO: Handle whitespace somewhere else
+                match c.as_str() {
+                    "\n" => {
+                        self.goto(0, y + 1);
+                        self.buffer.push(String::new());
+                    }
+                    _ => {
+                        self.buffer[y].insert_str(x, &c);
+                        self.right(1);
+                    }
+                }
             }
-            _ => {
-                self.buffer[y].insert_str(x, &c);
+            Mode::Command => {
+                self.command.insert_str(x - 1, &c);
                 self.right(1);
             }
         }
+
         self.refresh_line();
     }
 
@@ -46,7 +55,7 @@ impl Editor {
     /// Reload the contents of a line from the buffer. Useful when modifying a
     /// line in place. In command mode, refresh the command line.
     pub fn refresh_line(&mut self) {
-        let (mut x, y) = self.pos();
+        let (x, y) = self.pos();
         let line = match self.mode {
             Mode::Insert | Mode::Normal => self.buffer[y].clone(),
             Mode::Command => format!(":{}", self.command),

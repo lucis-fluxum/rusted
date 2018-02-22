@@ -64,7 +64,7 @@ impl Editor {
         match *key {
             // TODO: Execute command
             Key::Char('\n') => self.print("[execute]"),
-            Key::Char(c) => self.insert_command_char(c),
+            Key::Char(c) => self.insert_char(c),
             Key::Left | Key::Right => self.do_arrow_key_move(key),
             _ => {}
         }
