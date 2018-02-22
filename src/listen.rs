@@ -62,12 +62,9 @@ impl Editor {
 
     fn command_mode_key(&mut self, key: &Key) {
         match *key {
-            Key::Char('\n') => self.print("EXECUTING!"), // TODO: Execute command
-            Key::Char(c) => {
-                // TODO: Extract this to command module
-                self.print(c);
-                self.command += &c.to_string();
-            }
+            // TODO: Execute command
+            Key::Char('\n') => self.print("[execute]"),
+            Key::Char(c) => self.insert_command_char(c),
             Key::Left | Key::Right => self.do_arrow_key_move(key),
             _ => {}
         }

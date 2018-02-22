@@ -1,6 +1,6 @@
 use termion::clear;
 
-use editor::Editor;
+use editor::{Editor, Mode};
 
 impl Editor {
     /// Insert a character at the cursor's current position.
@@ -18,7 +18,7 @@ impl Editor {
             }
             _ => {
                 self.buffer[y].insert_str(x, &c);
-                self.x += 1;
+                self.right(1);
             }
         }
         self.refresh_line();
@@ -38,16 +38,19 @@ impl Editor {
         let (x, y) = self.pos();
         if x > 0 {
             self.buffer[y].remove(x - 1);
-            self.x -= 1;
+            self.left(1);
         }
         self.refresh_line();
     }
 
     /// Reload the contents of a line from the buffer. Useful when modifying a
-    /// line in place.
+    /// line in place. In command mode, refresh the command line.
     pub fn refresh_line(&mut self) {
-        let (x, y) = self.pos();
-        let line = self.buffer[y].clone();
+        let (mut x, y) = self.pos();
+        let line = match self.mode {
+            Mode::Insert | Mode::Normal => self.buffer[y].clone(),
+            Mode::Command => format!(":{}", self.command),
+        };
         self.goto(0, y);
         self.print(clear::CurrentLine);
         self.print(line);
