@@ -47,9 +47,20 @@ impl Editor {
     /// character.
     pub fn backspace(&mut self) {
         let (x, y) = self.pos();
-        if x > 0 {
-            self.buffer[y].remove(x - 1);
-            self.left(1);
+        match self.mode {
+            Mode::Insert => {
+                if x > 0 {
+                    self.buffer[y].remove(x - 1);
+                    self.left(1);
+                }
+            }
+            Mode::Command => {
+                if x > 1 {
+                    self.command.remove(x - 2);
+                    self.left(1);
+                }
+            }
+            _ => {}
         }
         self.refresh_line();
     }

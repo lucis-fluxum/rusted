@@ -64,6 +64,7 @@ impl Editor {
             // TODO: Execute command
             Key::Char('\n') => self.print("[execute]"),
             Key::Char(c) => self.insert_char(c),
+            Key::Backspace => self.backspace(),
 
             // Switching modes
             Key::Esc => {
