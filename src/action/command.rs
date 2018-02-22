@@ -13,8 +13,6 @@ impl Editor {
     // TODO: Note that self.command remains unchanged after teardown. Consider
     // saving this in the command history.
     pub fn teardown_command_line(&mut self) {
-        let offset = self.command.len() + 1;
-        self.left(offset);
         self.print(clear::CurrentLine);
         self.goto(0, 0); // TODO: Go to last known position
     }
