@@ -21,7 +21,6 @@ impl Editor {
     }
 
     fn normal_mode_key(&mut self, key: &Key) {
-        self.do_vim_move(key);
         match *key {
             // Switching modes
             Key::Char('i') => self.set_mode(Mode::Insert),
@@ -65,6 +64,14 @@ impl Editor {
             // TODO: Execute command
             Key::Char('\n') => self.print("[execute]"),
             Key::Char(c) => self.insert_char(c),
+
+            // Switching modes
+            Key::Esc => {
+                self.teardown_command_line();
+                self.set_mode(Mode::Normal);
+            }
+
+            // Movement
             Key::Left | Key::Right => self.do_arrow_key_move(key),
             _ => {}
         }

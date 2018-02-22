@@ -3,6 +3,8 @@ use termion::clear;
 use editor::{Editor, Mode};
 
 impl Editor {
+    // TODO: Inserting a newline inside a word should split the word onto a new
+    // line
     /// Insert a character at the cursor's current position.
     ///
     /// If the character is a newline, an empty line is added to the buffer and

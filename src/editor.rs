@@ -3,6 +3,7 @@ use std::fmt::Display;
 use termion::raw::{IntoRawMode, RawTerminal};
 use termion::clear;
 
+#[derive(Debug)]
 pub enum Mode {
     Normal,
     Insert,
@@ -10,6 +11,7 @@ pub enum Mode {
     // TODO: Visual mode, selectable regions, copy/paste, etc
 }
 
+// TODO: Impl Debug, please
 pub struct Editor {
     pub mode: Mode,
     pub output: RawTerminal<Stdout>,
@@ -67,7 +69,9 @@ impl Editor {
 
 impl Drop for Editor {
     fn drop(&mut self) {
-        println!("{:?}", self.buffer);
+        println!("\rbuffer: {:?}", self.buffer);
+        println!("\rmode: {:?}", self.mode);
+        println!("\rcommand: {:?}", self.command);
         // self.reset();
     }
 }
