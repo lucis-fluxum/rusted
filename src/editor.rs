@@ -80,12 +80,19 @@ impl Editor {
     fn status(&self) -> String {
         let mode = format!("{:?}", self.mode).to_uppercase();
         format!(
-            "{}\t{}:{}\tCmd: {:?}",
+            "{}\t{}%\t{}:{}\tCmd: {:?}",
             mode,
+            self.percentage_pos() as u8,
             self.y + 1,
             self.x + 1,
             self.command
         )
+    }
+
+    fn percentage_pos(&self) -> f32 {
+        let line = (self.y + 1) as f32;
+        let height = self.buffer.len() as f32;
+        line / height * 100.0
     }
 
     fn clear(&mut self) {
