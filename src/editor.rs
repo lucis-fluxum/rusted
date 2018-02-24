@@ -3,6 +3,7 @@ use std::fmt::Display;
 use termion::raw::{IntoRawMode, RawTerminal};
 use termion::screen::AlternateScreen;
 use termion::clear;
+use termion::color;
 use termion::terminal_size;
 
 #[derive(Debug)]
@@ -12,6 +13,9 @@ pub enum Mode {
     Command,
     // TODO: Visual mode, selectable regions, copy/paste, etc
 }
+
+const BG_COLOR_RGB: color::Rgb = color::Rgb(45, 20, 0);
+const FG_COLOR_RGB: color::Rgb = color::Rgb(215, 160, 120);
 
 // TODO: Impl Debug, please
 pub struct Editor {
@@ -31,7 +35,7 @@ impl Editor {
         let mut e = Editor {
             mode: Mode::Normal,
             output: AlternateScreen::from(stdout().into_raw_mode().unwrap()),
-            buffer: vec![String::new()],
+            buffer: vec![],
             filename: filename,
             x: 0,
             y: 0,
@@ -48,8 +52,9 @@ impl Editor {
     }
 
     pub fn reset(&mut self) {
-        self.buffer.clear();
-        self.buffer.push(String::new());
+        self.buffer = vec![String::new()];
+        self.set_mode(Mode::Normal);
+        self.print(clear::All);
         self.goto(0, 0);
     }
 
@@ -64,7 +69,13 @@ impl Editor {
     }
 
     pub fn print<T: Display>(&mut self, item: T) {
-        write!(self.output, "{}", item).unwrap();
+        write!(
+            self.output,
+            "{}{}{}",
+            color::Bg(BG_COLOR_RGB),
+            color::Fg(FG_COLOR_RGB),
+            item
+        ).unwrap();
         self.output.flush().unwrap();
     }
 
