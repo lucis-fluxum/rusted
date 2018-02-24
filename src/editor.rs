@@ -2,6 +2,7 @@ use std::io::{stdout, Stdout, Write};
 use std::fmt::Display;
 use termion::raw::{IntoRawMode, RawTerminal};
 use termion::clear;
+use termion::terminal_size;
 
 #[derive(Debug)]
 pub enum Mode {
@@ -18,11 +19,12 @@ pub struct Editor {
     pub buffer: Vec<String>,
     pub x: usize,
     pub y: usize,
+    pub size: (usize, usize),
     pub command: String,
 }
 
 // TODO: Initialization with background/foreground colors
-// TODO: Preserve terminal state before launch, restore on exit
+// TODO: Use AlternateScreen to preserve/restore terminal state
 // TODO: Status messages and prompts at bottom
 impl Editor {
     pub fn new() -> Editor {
@@ -32,6 +34,7 @@ impl Editor {
             buffer: vec![String::new()],
             x: 0,
             y: 0,
+            size: (0, 0),
             command: String::new(),
         };
         e.init();
@@ -40,6 +43,8 @@ impl Editor {
 
     fn init(&mut self) {
         self.reset();
+        let (cols, rows) = terminal_size().unwrap();
+        self.size = (cols as usize, rows as usize);
     }
 
     pub fn reset(&mut self) {
@@ -72,6 +77,8 @@ impl Drop for Editor {
         println!("\rbuffer: {:?}", self.buffer);
         println!("\rmode: {:?}", self.mode);
         println!("\rcommand: {:?}", self.command);
+        println!("\rpos: {:?}", self.pos());
+        println!("\rsize: {:?}", self.size);
         // self.reset();
     }
 }
