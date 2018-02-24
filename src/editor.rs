@@ -1,6 +1,7 @@
 use std::io::{stdout, Stdout, Write};
 use std::fmt::Display;
 use termion::raw::{IntoRawMode, RawTerminal};
+use termion::screen::AlternateScreen;
 use termion::clear;
 use termion::terminal_size;
 
@@ -15,7 +16,7 @@ pub enum Mode {
 // TODO: Impl Debug, please
 pub struct Editor {
     pub mode: Mode,
-    pub output: RawTerminal<Stdout>,
+    pub output: AlternateScreen<RawTerminal<Stdout>>,
     pub buffer: Vec<String>,
     pub x: usize,
     pub y: usize,
@@ -23,13 +24,12 @@ pub struct Editor {
 }
 
 // TODO: Initialization with background/foreground colors
-// TODO: Use AlternateScreen to preserve/restore terminal state
 // TODO: Status messages and prompts at bottom
 impl Editor {
     pub fn new() -> Editor {
         let mut e = Editor {
             mode: Mode::Normal,
-            output: stdout().into_raw_mode().unwrap(),
+            output: AlternateScreen::from(stdout().into_raw_mode().unwrap()),
             buffer: vec![String::new()],
             x: 0,
             y: 0,
@@ -77,6 +77,10 @@ impl Editor {
         (cols as usize, rows as usize)
     }
 
+    pub fn debug_info(&self) -> (Vec<String>, (usize, usize)) {
+        (self.buffer.clone(), self.size())
+    }
+
     fn status(&self) -> String {
         let mode = format!("{:?}", self.mode).to_uppercase();
         format!(
@@ -99,15 +103,5 @@ impl Editor {
         self.buffer.clear();
         self.buffer.push(String::new());
         self.print(clear::All);
-    }
-}
-
-impl Drop for Editor {
-    fn drop(&mut self) {
-        print!(
-            "\r\nbuffer: {:?}\r\nsize: {:?}\r\n",
-            self.buffer,
-            self.size()
-        );
     }
 }
