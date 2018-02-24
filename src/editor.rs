@@ -27,12 +27,12 @@ pub struct Editor {
 // TODO: Initialization with background/foreground colors
 // TODO: Status messages and prompts at bottom
 impl Editor {
-    pub fn new() -> Editor {
+    pub fn new(filename: String) -> Editor {
         let mut e = Editor {
             mode: Mode::Normal,
             output: AlternateScreen::from(stdout().into_raw_mode().unwrap()),
             buffer: vec![String::new()],
-            filename: String::new(),
+            filename: filename,
             x: 0,
             y: 0,
             command: String::new(),
@@ -43,11 +43,13 @@ impl Editor {
 
     fn init(&mut self) {
         self.reset();
+        self.load();
         self.reset_status();
     }
 
     pub fn reset(&mut self) {
-        self.clear();
+        self.buffer.clear();
+        self.buffer.push(String::new());
         self.goto(0, 0);
     }
 
@@ -83,15 +85,18 @@ impl Editor {
         (self.buffer.clone(), self.size(), self.filename.clone())
     }
 
+    // TODO: In command mode, use position values from last known position
+    // instead
     fn status(&self) -> String {
         let mode = format!("{:?}", self.mode).to_uppercase();
         format!(
-            "{}\t{}%\t{}:{}\tCmd: {:?}",
+            "{} | {}% {}:{} | Cmd: {:?} | File: {:?}",
             mode,
             self.percentage_pos() as u8,
             self.y + 1,
             self.x + 1,
-            self.command
+            self.command,
+            self.filename
         )
     }
 
@@ -99,11 +104,5 @@ impl Editor {
         let line = (self.y + 1) as f32;
         let height = self.buffer.len() as f32;
         line / height * 100.0
-    }
-
-    fn clear(&mut self) {
-        self.buffer.clear();
-        self.buffer.push(String::new());
-        self.print(clear::All);
     }
 }

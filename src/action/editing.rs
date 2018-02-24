@@ -83,10 +83,10 @@ impl Editor {
     /// Reload the contents of the entire screen from the buffer.
     pub fn refresh_all(&mut self) {
         let (x, y) = self.pos();
-        for i in 0..self.buffer.len() {
-            self.goto(0, i);
-            self.refresh_line();
-        }
+        self.goto(0, 0);
+        self.print(clear::All);
+        let contents = self.buffer.join("\r\n");
+        self.print(contents);
         self.goto(x, y);
     }
 }
