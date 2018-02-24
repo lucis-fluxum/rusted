@@ -68,6 +68,15 @@ impl Editor {
         self.output.flush().unwrap();
     }
 
+    pub fn print_notice<T: Display>(&mut self, item: T) {
+        let prev_pos = self.pos();
+        let pos = (0, self.size().1 - 1);
+        self.goto(pos.0, pos.1);
+        self.print(clear::CurrentLine);
+        self.print(item);
+        self.goto(prev_pos.0, prev_pos.1);
+    }
+
     pub fn set_mode(&mut self, mode: Mode) {
         self.mode = mode;
         match self.mode {

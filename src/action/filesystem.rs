@@ -18,12 +18,13 @@ impl Editor {
 
     /// Save the contents of the buffer to a file, truncating the file if it
     /// exists.
-    pub fn save(&self) {
+    pub fn save(&mut self) {
         if !self.filename.is_empty() {
             let mut writer = LineWriter::new(File::create(&self.filename).unwrap());
             for line in &self.buffer {
                 write!(writer, "{}\n", line).unwrap();
             }
+            self.print_notice("Saved.");
         }
     }
 }

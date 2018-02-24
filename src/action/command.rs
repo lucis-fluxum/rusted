@@ -5,6 +5,7 @@ impl Editor {
     pub fn setup_command_line(&mut self) {
         let loc = (0, self.size().1);
         self.goto(loc.0, loc.1);
+        self.print(clear::CurrentLine);
         self.print(":");
         self.right(1);
         self.command.clear();
