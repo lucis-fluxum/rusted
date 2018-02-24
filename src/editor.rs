@@ -18,6 +18,7 @@ pub struct Editor {
     pub mode: Mode,
     pub output: AlternateScreen<RawTerminal<Stdout>>,
     pub buffer: Vec<String>,
+    pub filename: String,
     pub x: usize,
     pub y: usize,
     pub command: String,
@@ -31,6 +32,7 @@ impl Editor {
             mode: Mode::Normal,
             output: AlternateScreen::from(stdout().into_raw_mode().unwrap()),
             buffer: vec![String::new()],
+            filename: String::new(),
             x: 0,
             y: 0,
             command: String::new(),
@@ -77,8 +79,8 @@ impl Editor {
         (cols as usize, rows as usize)
     }
 
-    pub fn debug_info(&self) -> (Vec<String>, (usize, usize)) {
-        (self.buffer.clone(), self.size())
+    pub fn debug_info(&self) -> (Vec<String>, (usize, usize), String) {
+        (self.buffer.clone(), self.size(), self.filename.clone())
     }
 
     fn status(&self) -> String {
