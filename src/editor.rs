@@ -19,7 +19,6 @@ pub struct Editor {
     pub buffer: Vec<String>,
     pub x: usize,
     pub y: usize,
-    pub size: (usize, usize),
     pub command: String,
 }
 
@@ -34,7 +33,6 @@ impl Editor {
             buffer: vec![String::new()],
             x: 0,
             y: 0,
-            size: (0, 0),
             command: String::new(),
         };
         e.init();
@@ -43,8 +41,6 @@ impl Editor {
 
     fn init(&mut self) {
         self.reset();
-        let (cols, rows) = terminal_size().unwrap();
-        self.size = (cols as usize, rows as usize);
     }
 
     pub fn reset(&mut self) {
@@ -65,6 +61,11 @@ impl Editor {
         }
     }
 
+    pub fn size(&self) -> (usize, usize) {
+        let (cols, rows) = terminal_size().unwrap();
+        (cols as usize, rows as usize)
+    }
+
     fn clear(&mut self) {
         self.buffer.clear();
         self.buffer.push(String::new());
@@ -78,7 +79,7 @@ impl Drop for Editor {
         println!("\rmode: {:?}", self.mode);
         println!("\rcommand: {:?}", self.command);
         println!("\rpos: {:?}", self.pos());
-        println!("\rsize: {:?}", self.size);
+        println!("\rsize: {:?}", self.size());
         // self.reset();
     }
 }
