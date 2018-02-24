@@ -17,6 +17,7 @@ impl Editor {
                 Mode::Insert => self.insert_mode_key(&key),
                 Mode::Command => self.command_mode_key(&key),
             }
+            self.reset_status();
         }
     }
 

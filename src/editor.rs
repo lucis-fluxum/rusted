@@ -41,11 +41,22 @@ impl Editor {
 
     fn init(&mut self) {
         self.reset();
+        self.reset_status();
     }
 
     pub fn reset(&mut self) {
         self.clear();
         self.goto(0, 0);
+    }
+
+    pub fn reset_status(&mut self) {
+        let prev_pos = self.pos();
+        let pos = (0, self.size().1 - 2);
+        let status = self.status();
+        self.goto(pos.0, pos.1);
+        self.print(clear::CurrentLine);
+        self.print(status);
+        self.goto(prev_pos.0, prev_pos.1);
     }
 
     pub fn print<T: Display>(&mut self, item: T) {
@@ -66,6 +77,17 @@ impl Editor {
         (cols as usize, rows as usize)
     }
 
+    fn status(&self) -> String {
+        let mode = format!("{:?}", self.mode).to_uppercase();
+        format!(
+            "{}\t{}:{}\tCmd: {:?}",
+            mode,
+            self.y + 1,
+            self.x + 1,
+            self.command
+        )
+    }
+
     fn clear(&mut self) {
         self.buffer.clear();
         self.buffer.push(String::new());
@@ -75,11 +97,10 @@ impl Editor {
 
 impl Drop for Editor {
     fn drop(&mut self) {
-        println!("\rbuffer: {:?}", self.buffer);
-        println!("\rmode: {:?}", self.mode);
-        println!("\rcommand: {:?}", self.command);
-        println!("\rpos: {:?}", self.pos());
-        println!("\rsize: {:?}", self.size());
-        // self.reset();
+        print!(
+            "\r\nbuffer: {:?}\r\nsize: {:?}\r\n",
+            self.buffer,
+            self.size()
+        );
     }
 }
