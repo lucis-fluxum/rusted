@@ -32,6 +32,9 @@ impl Editor {
                 self.do_vim_move(key)
             }
             Key::Left | Key::Right | Key::Up | Key::Down => self.do_arrow_key_move(key),
+
+            // Misc
+            Key::Ctrl('s') => self.save(),
             _ => {}
         }
     }
@@ -56,6 +59,9 @@ impl Editor {
 
             // Movement
             Key::Left | Key::Right | Key::Up | Key::Down => self.do_arrow_key_move(key),
+
+            // Misc
+            Key::Ctrl('s') => self.save(),
             _ => {}
         }
     }

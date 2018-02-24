@@ -11,9 +11,7 @@ fn main() {
     let debug_info = {
         let filename = std::env::args().nth(1).unwrap_or_default();
         let mut editor = Editor::new(filename);
-
         editor.respond_to_keys();
-        editor.save();
 
         editor.debug_info()
     };
