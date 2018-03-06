@@ -1,6 +1,9 @@
 # rusted
 
-Minimal Vim-like text editor in Rust
+Minimal Vim-like text editor in Rust.
+
+Here's a screenshot of it editing its own source code:
+![screenshot](https://raw.githubusercontent.com/wiki/lucis-fluxum/rusted/images/rusted.png)
 
 ## Contributing
 
