@@ -61,13 +61,14 @@ impl Editor {
     }
 
     pub fn reset_status(&mut self) {
-        let prev_pos = self.pos();
+        // Don't use save_pos here since it messes up the status
+        let (prev_x, prev_y) = self.pos();
         let pos = (0, self.size().1 - 2);
         let status = self.status();
         self.goto(pos.0, pos.1);
         self.print(clear::CurrentLine);
         self.print(status);
-        self.goto(prev_pos.0, prev_pos.1);
+        self.goto(prev_x, prev_y);
     }
 
     pub fn print<T: Display>(&mut self, item: T) {
@@ -82,12 +83,12 @@ impl Editor {
     }
 
     pub fn print_notice<T: Display>(&mut self, item: T) {
-        let prev_pos = self.pos();
+        self.save_pos();
         let pos = (0, self.size().1 - 1);
         self.goto(pos.0, pos.1);
         self.print(clear::CurrentLine);
         self.print(item);
-        self.goto(prev_pos.0, prev_pos.1);
+        self.restore_pos();
     }
 
     pub fn set_mode(&mut self, mode: Mode) {
@@ -103,25 +104,29 @@ impl Editor {
         (cols as usize, rows as usize)
     }
 
-    pub fn debug_info(&self) -> (Vec<String>, (usize, usize), String) {
-        (self.buffer.clone(), self.size(), self.filename.clone())
+    pub fn debug_info(&self) -> (Vec<String>, (usize, usize), String, Vec<(usize, usize)>) {
+        (
+            self.buffer.clone(),
+            self.size(),
+            self.filename.clone(),
+            self.saved_positions.clone(),
+        )
     }
 
     fn status(&self) -> String {
         let mode = format!("{:?}", self.mode).to_uppercase();
         let (col, line) = match self.mode {
-            Mode::Command => self.saved_positions.last().cloned().unwrap_or_default(),
+            Mode::Command => self.saved_positions[self.saved_positions.len() - 1],
             _ => (self.x, self.y), // TODO: NLL optimization
         };
         format!(
-            "{} | {}% {}:{} | Cmd: {:?} | File: {:?} | Saved: {:?}",
+            "{} | {}% {}:{} | Cmd: {:?} | File: {:?}",
             mode,
             self.percentage_pos(line) as u8,
             line + 1,
             col + 1,
             self.command,
             self.filename,
-            self.saved_positions,
         )
     }
 

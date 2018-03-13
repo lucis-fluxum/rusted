@@ -87,6 +87,7 @@ impl Editor {
         self.print(clear::All);
         let contents = self.buffer.join("\r\n");
         self.print(contents);
-        self.goto(x, y);
+        self.right(x);
+        self.down(y);
     }
 }
