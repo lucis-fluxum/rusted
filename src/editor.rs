@@ -26,6 +26,7 @@ pub struct Editor {
     pub x: usize,
     pub y: usize,
     pub command: String,
+    pub saved_pos: (usize, usize),
 }
 
 // TODO: Initialization with background/foreground colors
@@ -40,6 +41,7 @@ impl Editor {
             x: 0,
             y: 0,
             command: String::new(),
+            saved_pos: (0, 0),
         };
         e.init();
         e
@@ -105,16 +107,18 @@ impl Editor {
         (self.buffer.clone(), self.size(), self.filename.clone())
     }
 
-    // TODO: In command mode, use position values from last known position
-    // instead
     fn status(&self) -> String {
         let mode = format!("{:?}", self.mode).to_uppercase();
+        let (col, line) = match self.mode {
+            Mode::Command => self.saved_pos,
+            _ => (self.x, self.y), // TODO: NLL optimization
+        };
         format!(
             "{} | {}% {}:{} | Cmd: {:?} | File: {:?}",
             mode,
             self.percentage_pos() as u8,
-            self.y + 1,
-            self.x + 1,
+            line + 1,
+            col + 1,
             self.command,
             self.filename
         )

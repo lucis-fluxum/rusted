@@ -3,8 +3,9 @@ use editor::Editor;
 
 impl Editor {
     pub fn setup_command_line(&mut self) {
-        let loc = (0, self.size().1);
-        self.goto(loc.0, loc.1);
+        self.saved_pos = self.pos();
+        let (_, y) = self.size();
+        self.goto(0, y);
         self.print(clear::CurrentLine);
         self.print(":");
         self.right(1);
@@ -15,6 +16,7 @@ impl Editor {
     // saving this in the command history.
     pub fn teardown_command_line(&mut self) {
         self.print(clear::CurrentLine);
-        self.goto(0, 0); // TODO: Go to last known position
+        let (old_x, old_y) = self.saved_pos;
+        self.goto(old_x, old_y);
     }
 }
