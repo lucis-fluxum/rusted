@@ -14,6 +14,20 @@ impl Editor {
         (self.x, self.y)
     }
 
+    /// Saves the cursor's current location.
+    pub fn save_pos(&mut self) {
+        let pos = self.pos();
+        self.saved_positions.push(pos);
+    }
+
+    /// Moves the cursor to the last saved location.
+    pub fn restore_pos(&mut self) {
+        match self.saved_positions.pop() {
+            Some((x, y)) => self.goto(x, y),
+            None => {}
+        };
+    }
+
     /// Set the position of the cursor.
     ///
     /// This is (0, 0)-based cursor movement, instead of (1, 1)-based as termion

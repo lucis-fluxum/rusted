@@ -26,7 +26,7 @@ pub struct Editor {
     pub x: usize,
     pub y: usize,
     pub command: String,
-    pub saved_pos: (usize, usize),
+    pub saved_positions: Vec<(usize, usize)>,
 }
 
 // TODO: Initialization with background/foreground colors
@@ -41,7 +41,7 @@ impl Editor {
             x: 0,
             y: 0,
             command: String::new(),
-            saved_pos: (0, 0),
+            saved_positions: vec![],
         };
         e.init();
         e
@@ -110,22 +110,23 @@ impl Editor {
     fn status(&self) -> String {
         let mode = format!("{:?}", self.mode).to_uppercase();
         let (col, line) = match self.mode {
-            Mode::Command => self.saved_pos,
+            Mode::Command => self.saved_positions.last().cloned().unwrap_or_default(),
             _ => (self.x, self.y), // TODO: NLL optimization
         };
         format!(
-            "{} | {}% {}:{} | Cmd: {:?} | File: {:?}",
+            "{} | {}% {}:{} | Cmd: {:?} | File: {:?} | Saved: {:?}",
             mode,
-            self.percentage_pos() as u8,
+            self.percentage_pos(line) as u8,
             line + 1,
             col + 1,
             self.command,
-            self.filename
+            self.filename,
+            self.saved_positions,
         )
     }
 
-    fn percentage_pos(&self) -> f32 {
-        let line = (self.y + 1) as f32;
+    fn percentage_pos(&self, y: usize) -> f32 {
+        let line = (y + 1) as f32;
         let height = self.buffer.len() as f32;
         line / height * 100.0
     }

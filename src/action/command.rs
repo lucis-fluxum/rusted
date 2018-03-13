@@ -3,7 +3,7 @@ use editor::Editor;
 
 impl Editor {
     pub fn setup_command_line(&mut self) {
-        self.saved_pos = self.pos();
+        self.save_pos();
         let (_, y) = self.size();
         self.goto(0, y);
         self.print(clear::CurrentLine);
@@ -16,7 +16,6 @@ impl Editor {
     // saving this in the command history.
     pub fn teardown_command_line(&mut self) {
         self.print(clear::CurrentLine);
-        let (old_x, old_y) = self.saved_pos;
-        self.goto(old_x, old_y);
+        self.restore_pos();
     }
 }
