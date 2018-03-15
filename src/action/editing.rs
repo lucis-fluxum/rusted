@@ -35,12 +35,23 @@ impl Editor {
         self.refresh_line();
     }
 
-    // TODO: Deleting one after the end of a line should join it with the line below
-    /// Delete the character under the cursor.
+    // TODO: Deleting a character from a line wrapped around to a new line is
+    // broken
+    /// Delete the character under the cursor. If the cursor is one past the
+    /// end of a line, it joins the current line with the line below, if
+    /// possible.
     pub fn delete_char(&mut self) {
         let (x, y) = self.pos();
-        self.buffer[y].remove(x);
-        self.refresh_line();
+        if x == self.buffer[y].len() {
+            if y + 1 < self.buffer.len() {
+                let next_line = self.buffer.remove(y + 1);
+                self.buffer[y] += &next_line;
+                self.refresh_all();
+            }
+        } else {
+            self.buffer[y].remove(x);
+            self.refresh_line();
+        }
     }
 
     /// Delete the character just before the cursor, move the cursor back 1
@@ -82,12 +93,11 @@ impl Editor {
     // TODO: What if the buffer is too large to fit into the current screen?
     /// Reload the contents of the entire screen from the buffer.
     pub fn refresh_all(&mut self) {
-        let (x, y) = self.pos();
+        self.save_pos();
         self.goto(0, 0);
         self.print(clear::All);
         let contents = self.buffer.join("\r\n");
         self.print(contents);
-        self.right(x);
-        self.down(y);
+        self.restore_pos();
     }
 }

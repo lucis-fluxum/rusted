@@ -28,6 +28,7 @@ impl Editor {
         };
     }
 
+    // TODO: Check if x and y lie within the boundaries of the buffer
     /// Set the position of the cursor.
     ///
     /// This is (0, 0)-based cursor movement, instead of (1, 1)-based as termion
