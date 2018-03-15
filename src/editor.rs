@@ -18,9 +18,11 @@ const BG_COLOR_RGB: color::Rgb = color::Rgb(45, 20, 0);
 const FG_COLOR_RGB: color::Rgb = color::Rgb(215, 160, 120);
 
 // TODO: Impl Debug, please
+// TODO: Don't use AlternateScreen until you get error logging figured out
 pub struct Editor {
     pub mode: Mode,
-    pub output: AlternateScreen<RawTerminal<Stdout>>,
+    // pub output: AlternateScreen<RawTerminal<Stdout>>,
+    pub output: RawTerminal<Stdout>,
     pub buffer: Vec<String>,
     pub filename: String,
     pub x: usize,
@@ -35,7 +37,8 @@ impl Editor {
     pub fn new(filename: String) -> Editor {
         let mut e = Editor {
             mode: Mode::Normal,
-            output: AlternateScreen::from(stdout().into_raw_mode().unwrap()),
+            // output: AlternateScreen::from(stdout().into_raw_mode().unwrap()),
+            output: stdout().into_raw_mode().unwrap(),
             buffer: vec![],
             filename: filename,
             x: 0,
