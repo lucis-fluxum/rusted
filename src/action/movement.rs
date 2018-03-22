@@ -120,6 +120,14 @@ impl Editor {
         }
     }
 
+    // TODO: Word-moving commands
+
+    pub fn move_forward_word(&mut self) {}
+
+    pub fn move_back_word(&mut self) {}
+
+    pub fn move_end_of_word(&mut self) {}
+
     /// Move the cursor up 'n' positions.
     ///
     /// If moving to a line shorter than the current line, the cursor will jump

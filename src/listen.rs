@@ -4,6 +4,8 @@ use termion::input::TermRead;
 
 use editor::{Editor, Mode};
 
+// TODO: Add modifiers to movement commands (2j, 6b, etc)
+// You'll need to distinguish between command line commands and editor commands
 impl Editor {
     pub fn respond_to_keys(&mut self) {
         for key in io::stdin().keys().map(|key| key.unwrap()) {
@@ -86,7 +88,9 @@ impl Editor {
             Key::Char('l') => self.right(1),
             Key::Char('k') => self.up(1),
             Key::Char('j') => self.down(1),
-            // TODO: 'w', 'b', 'e'?
+            Key::Char('w') => self.move_forward_word(),
+            Key::Char('b') => self.move_back_word(),
+            Key::Char('e') => self.move_end_of_word(),
             _ => {}
         }
     }
