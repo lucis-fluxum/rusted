@@ -67,8 +67,7 @@ impl Editor {
 
     fn command_mode_key(&mut self, key: &Key) {
         match *key {
-            // TODO: Execute command
-            Key::Char('\n') => self.print("[execute]"),
+            Key::Char('\n') => self.execute_command(),
             Key::Char(c) => self.insert_char(c),
             Key::Backspace => self.backspace_command_line(),
 

@@ -31,4 +31,9 @@ impl Editor {
         self.teardown_command_line();
         self.set_mode(Mode::Normal);
     }
+
+    // TODO: Add behaviors for specific commands
+    pub fn execute_command(&mut self) {
+        self.print("[execute]");
+    }
 }
