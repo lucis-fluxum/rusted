@@ -1,5 +1,5 @@
 use termion::clear;
-use editor::Editor;
+use editor::{Editor, Mode};
 
 impl Editor {
     pub fn setup_command_line(&mut self) {
@@ -17,5 +17,18 @@ impl Editor {
     pub fn teardown_command_line(&mut self) {
         self.print(clear::CurrentLine);
         self.restore_pos();
+    }
+
+    pub fn backspace_command_line(&mut self) {
+        if self.command.is_empty() {
+            self.quit_command_mode();
+        } else {
+            self.backspace();
+        }
+    }
+
+    pub fn quit_command_mode(&mut self) {
+        self.teardown_command_line();
+        self.set_mode(Mode::Normal);
     }
 }
