@@ -28,14 +28,13 @@ impl Editor {
             Key::Char(':') => self.set_mode(Mode::Command),
 
             // Movement
-            Key::Char('h') | Key::Char('l') | Key::Char('k') | Key::Char('j') => {
-                self.do_vim_move(key)
-            }
             Key::Left | Key::Right | Key::Up | Key::Down => self.do_arrow_key_move(key),
 
             // Misc
             Key::Ctrl('s') => self.save(),
-            _ => {}
+
+            // Fallback to general Vim bindings
+            other => self.do_vim_move(&other),
         }
     }
 
@@ -84,11 +83,10 @@ impl Editor {
 
     fn do_vim_move(&mut self, key: &Key) {
         match *key {
-            Key::Char('h') => self.left(1),
+            Key::Char('h') | Key::Backspace => self.left(1),
             Key::Char('l') => self.right(1),
             Key::Char('k') => self.up(1),
             Key::Char('j') => self.down(1),
-            // TODO: Backspace moves to end of previous line
             // TODO: 'w', 'b', 'e'?
             _ => {}
         }
