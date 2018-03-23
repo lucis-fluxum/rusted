@@ -3,36 +3,38 @@ use termion::clear;
 use editor::{Editor, Mode};
 
 impl Editor {
-    // TODO: Inserting a newline inside a word should split the word onto a new
-    // line
     /// Insert a character at the cursor's current position.
     ///
-    /// If the character is a newline, an empty line is added to the buffer and
-    /// the cursor is moved to the beginning of the new line.
+    /// If the character is a newline, the rest of the current line is split
+    /// off into a new line and the cursor is moved to the next line.
     pub fn insert_char(&mut self, c: char) {
         let (x, y) = self.pos();
         let c = c.to_string();
         match self.mode {
-            Mode::Insert | Mode::Normal => {
+            Mode::Insert => {
                 // TODO: Handle whitespace somewhere else
                 match c.as_str() {
                     "\n" => {
+                        let leftover = self.buffer[y].split_off(x);
+                        self.buffer.insert(y + 1, leftover);
+                        self.refresh_all();
                         self.goto(0, y + 1);
-                        self.buffer.push(String::new());
                     }
                     _ => {
                         self.buffer[y].insert_str(x, &c);
                         self.right(1);
+                        self.refresh_line();
                     }
                 }
             }
             Mode::Command => {
                 self.command.insert_str(x - 1, &c);
                 self.right(1);
+                self.refresh_line();
             }
+            // Shouldn't be inserting anything in normal mode
+            Mode::Normal => {}
         }
-
-        self.refresh_line();
     }
 
     // TODO: Deleting a character from a line wrapped around to a new line is
