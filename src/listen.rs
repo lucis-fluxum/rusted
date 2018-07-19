@@ -15,16 +15,16 @@ impl Editor {
                 break;
             }
             match self.mode {
-                Mode::Normal => self.normal_mode_key(&key),
-                Mode::Insert => self.insert_mode_key(&key),
-                Mode::Command => self.command_mode_key(&key),
+                Mode::Normal => self.normal_mode_key(key),
+                Mode::Insert => self.insert_mode_key(key),
+                Mode::Command => self.command_mode_key(key),
             }
             self.reset_status();
         }
     }
 
-    fn normal_mode_key(&mut self, key: &Key) {
-        match *key {
+    fn normal_mode_key(&mut self, key: Key) {
+        match key {
             // Switching modes
             Key::Char('i') => self.set_mode(Mode::Insert),
             Key::Char(':') => self.set_mode(Mode::Command),
@@ -36,12 +36,12 @@ impl Editor {
             Key::Ctrl('s') => self.save(),
 
             // Fallback to general Vim bindings
-            other => self.do_vim_move(&other),
+            other => self.do_vim_move(other),
         }
     }
 
-    fn insert_mode_key(&mut self, key: &Key) {
-        match *key {
+    fn insert_mode_key(&mut self, key: Key) {
+        match key {
             // Editing
             Key::Char(c) => self.insert_char(c),
             Key::Backspace => self.backspace(),
@@ -67,8 +67,8 @@ impl Editor {
         }
     }
 
-    fn command_mode_key(&mut self, key: &Key) {
-        match *key {
+    fn command_mode_key(&mut self, key: Key) {
+        match key {
             Key::Char('\n') => self.execute_command(),
             Key::Char(c) => self.insert_char(c),
             Key::Backspace => self.backspace_command_line(),
@@ -82,8 +82,8 @@ impl Editor {
         }
     }
 
-    fn do_vim_move(&mut self, key: &Key) {
-        match *key {
+    fn do_vim_move(&mut self, key: Key) {
+        match key {
             Key::Char('h') | Key::Backspace => self.left(1),
             Key::Char('l') => self.right(1),
             Key::Char('k') => self.up(1),
@@ -95,8 +95,8 @@ impl Editor {
         }
     }
 
-    fn do_arrow_key_move(&mut self, key: &Key) {
-        match *key {
+    fn do_arrow_key_move(&mut self, key: Key) {
+        match key {
             Key::Left => self.left(1),
             Key::Right => self.right(1),
             Key::Up => self.up(1),

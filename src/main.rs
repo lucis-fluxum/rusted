@@ -1,7 +1,7 @@
 extern crate termion;
 
-mod editor;
 mod action;
+mod editor;
 mod listen;
 
 use editor::Editor;

@@ -22,9 +22,8 @@ impl Editor {
 
     /// Moves the cursor to the last saved location.
     pub fn restore_pos(&mut self) {
-        match self.saved_positions.pop() {
-            Some((x, y)) => self.goto(x, y),
-            None => {}
+        if let Some((x, y)) = self.saved_positions.pop() {
+            self.goto(x, y)
         };
     }
 

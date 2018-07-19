@@ -1,4 +1,4 @@
-pub mod movement;
+pub mod command;
 pub mod editing;
 pub mod filesystem;
-pub mod command;
+pub mod movement;

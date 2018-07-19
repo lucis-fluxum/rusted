@@ -1,6 +1,6 @@
+use std::fs::File;
 use std::io::prelude::*;
 use std::io::{BufReader, LineWriter};
-use std::fs::File;
 
 use editor::Editor;
 
@@ -22,7 +22,7 @@ impl Editor {
         if !self.filename.is_empty() {
             let mut writer = LineWriter::new(File::create(&self.filename).unwrap());
             for line in &self.buffer {
-                write!(writer, "{}\n", line).unwrap();
+                writeln!(writer, "{}", line).unwrap();
             }
             self.print_notice("Saved.");
         }

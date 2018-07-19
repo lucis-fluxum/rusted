@@ -1,5 +1,5 @@
-use termion::clear;
 use editor::{Editor, Mode};
+use termion::clear;
 
 impl Editor {
     pub fn setup_command_line(&mut self) {

@@ -1,9 +1,8 @@
-use std::io::{stdout, Stdout, Write};
 use std::fmt::Display;
-use termion::raw::{IntoRawMode, RawTerminal};
-use termion::screen::AlternateScreen;
+use std::io::{stdout, Stdout, Write};
 use termion::clear;
 use termion::color;
+use termion::raw::{IntoRawMode, RawTerminal};
 use termion::terminal_size;
 
 #[derive(Debug)]
@@ -40,7 +39,7 @@ impl Editor {
             // output: AlternateScreen::from(stdout().into_raw_mode().unwrap()),
             output: stdout().into_raw_mode().unwrap(),
             buffer: vec![],
-            filename: filename,
+            filename,
             x: 0,
             y: 0,
             command: String::new(),
@@ -107,6 +106,7 @@ impl Editor {
         (cols as usize, rows as usize)
     }
 
+    // TODO: Extract return values into a single DebugInfo type
     pub fn debug_info(&self) -> (Vec<String>, (usize, usize), String, Vec<(usize, usize)>) {
         (
             self.buffer.clone(),
