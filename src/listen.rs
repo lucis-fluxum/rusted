@@ -2,12 +2,12 @@ use std::io;
 use termion::event::Key;
 use termion::input::TermRead;
 
-use editor::{Editor, Mode};
+use crate::editor::{Editor, Mode};
 
 // TODO: Add modifiers to movement commands (2j, 6b, etc)
 // You'll need to distinguish between command line commands and editor commands
 impl Editor {
-    pub fn respond_to_keys(&mut self) {
+    crate fn respond_to_keys(&mut self) {
         for key in io::stdin().keys().map(|key| key.unwrap()) {
             if key == Key::Ctrl('c') {
                 // TODO: Figure out how to exit Vim

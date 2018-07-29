@@ -1,13 +1,13 @@
 use termion::clear;
 
-use editor::{Editor, Mode};
+use crate::editor::{Editor, Mode};
 
 impl Editor {
     /// Insert a character at the cursor's current position.
     ///
     /// If the character is a newline, the rest of the current line is split
     /// off into a new line and the cursor is moved to the next line.
-    pub fn insert_char(&mut self, c: char) {
+    crate fn insert_char(&mut self, c: char) {
         let (x, y) = self.pos();
         let c = c.to_string();
         match self.mode {
@@ -42,7 +42,7 @@ impl Editor {
     /// Delete the character under the cursor. If the cursor is one past the
     /// end of a line, it joins the current line with the line below, if
     /// possible.
-    pub fn delete_char(&mut self) {
+    crate fn delete_char(&mut self) {
         let (x, y) = self.pos();
         if x == self.buffer[y].len() {
             if y + 1 < self.buffer.len() {
@@ -58,7 +58,7 @@ impl Editor {
 
     /// Delete the character just before the cursor, move the cursor back 1
     /// character.
-    pub fn backspace(&mut self) {
+    crate fn backspace(&mut self) {
         let (x, y) = self.pos();
         match self.mode {
             Mode::Insert => {
@@ -80,7 +80,7 @@ impl Editor {
 
     /// Reload the contents of a line from the buffer. Useful when modifying a
     /// line in place. In command mode, refresh the command line.
-    pub fn refresh_line(&mut self) {
+    crate fn refresh_line(&mut self) {
         let (x, y) = self.pos();
         let line = match self.mode {
             Mode::Insert | Mode::Normal => self.buffer[y].clone(),
@@ -94,7 +94,7 @@ impl Editor {
 
     // TODO: What if the buffer is too large to fit into the current screen?
     /// Reload the contents of the entire screen from the buffer.
-    pub fn refresh_all(&mut self) {
+    crate fn refresh_all(&mut self) {
         self.save_pos();
         self.goto(0, 0);
         self.print(clear::All);

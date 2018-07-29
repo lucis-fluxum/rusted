@@ -1,10 +1,10 @@
-extern crate termion;
+#![warn(rust_2018_idioms)]
 
 mod action;
 mod editor;
 mod listen;
 
-use editor::Editor;
+use crate::editor::Editor;
 
 fn main() {
     // TODO: Use some kind of logging crate for debug information

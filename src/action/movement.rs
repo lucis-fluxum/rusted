@@ -1,7 +1,7 @@
 use termion::cursor::*;
 
-use editor::Editor;
-use editor::Mode;
+use crate::editor::Editor;
+use crate::editor::Mode;
 
 // TODO: Scrolling when traveling up or down
 // TODO: Scrolling command history when moving up/down in command mode
@@ -9,19 +9,19 @@ impl Editor {
     // TODO: Use cursor_pos function once
     // https://github.com/ticki/termion/issues/136 is fixed
     /// Get the current (0, 0)-based position of the cursor.
-    pub fn pos(&mut self) -> (usize, usize) {
+    crate fn pos(&mut self) -> (usize, usize) {
         // self.output.cursor_pos().unwrap()
         (self.x, self.y)
     }
 
     /// Saves the cursor's current location.
-    pub fn save_pos(&mut self) {
+    crate fn save_pos(&mut self) {
         let pos = self.pos();
         self.saved_positions.push(pos);
     }
 
     /// Moves the cursor to the last saved location.
-    pub fn restore_pos(&mut self) {
+    crate fn restore_pos(&mut self) {
         if let Some((x, y)) = self.saved_positions.pop() {
             self.goto(x, y)
         };
@@ -32,7 +32,7 @@ impl Editor {
     ///
     /// This is (0, 0)-based cursor movement, instead of (1, 1)-based as termion
     /// provides.
-    pub fn goto(&mut self, x: usize, y: usize) {
+    crate fn goto(&mut self, x: usize, y: usize) {
         self.x = x;
         self.y = y;
         self.print(Goto(x as u16 + 1, y as u16 + 1));
@@ -50,7 +50,7 @@ impl Editor {
     ///
     /// Leftmost limit is the character after the initial `:` of the command
     /// line.
-    pub fn left(&mut self, n: usize) {
+    crate fn left(&mut self, n: usize) {
         let (x, y) = self.pos();
         match self.mode {
             Mode::Insert | Mode::Normal => {
@@ -90,7 +90,7 @@ impl Editor {
     /// # Command mode
     ///
     /// Doesn't allow rightward movement after reaching the end of the command.
-    pub fn right(&mut self, n: usize) {
+    crate fn right(&mut self, n: usize) {
         let (x, y) = self.pos();
         let end_of_current_line = self.get_end_of_line(y);
 
@@ -121,17 +121,17 @@ impl Editor {
 
     // TODO: Word-moving commands
 
-    pub fn move_forward_word(&mut self) {}
+    crate fn move_forward_word(&mut self) {}
 
-    pub fn move_back_word(&mut self) {}
+    crate fn move_back_word(&mut self) {}
 
-    pub fn move_end_of_word(&mut self) {}
+    crate fn move_end_of_word(&mut self) {}
 
     /// Move the cursor up 'n' positions.
     ///
     /// If moving to a line shorter than the current line, the cursor will jump
     /// to the end of the shorter line.
-    pub fn up(&mut self, n: usize) {
+    crate fn up(&mut self, n: usize) {
         match self.mode {
             Mode::Insert | Mode::Normal => {
                 let (x, y) = self.pos();
@@ -157,7 +157,7 @@ impl Editor {
     ///
     /// If moving to a line shorter than the current line, the cursor will jump
     /// to the end of the shorter line.
-    pub fn down(&mut self, n: usize) {
+    crate fn down(&mut self, n: usize) {
         match self.mode {
             Mode::Insert | Mode::Normal => {
                 let (x, y) = self.pos();
