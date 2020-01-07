@@ -6,7 +6,7 @@ use termion::raw::{IntoRawMode, RawTerminal};
 use termion::terminal_size;
 
 #[derive(Debug)]
-crate enum Mode {
+pub enum Mode {
     Normal,
     Insert,
     Command,
@@ -18,22 +18,22 @@ const FG_COLOR_RGB: color::Rgb = color::Rgb(215, 160, 120);
 
 // TODO: Impl Debug, please
 // TODO: Don't use AlternateScreen until you get error logging figured out
-crate struct Editor {
-    crate mode: Mode,
+pub struct Editor {
+    pub mode: Mode,
     // pub output: AlternateScreen<RawTerminal<Stdout>>,
-    crate output: RawTerminal<Stdout>,
-    crate buffer: Vec<String>,
-    crate filename: String,
-    crate x: usize,
-    crate y: usize,
-    crate command: String,
-    crate saved_positions: Vec<(usize, usize)>,
+    pub output: RawTerminal<Stdout>,
+    pub buffer: Vec<String>,
+    pub filename: String,
+    pub x: usize,
+    pub y: usize,
+    pub command: String,
+    pub saved_positions: Vec<(usize, usize)>,
 }
 
 // TODO: Initialization with background/foreground colors
 // TODO: Status messages and prompts at bottom
 impl Editor {
-    crate fn new(filename: String) -> Editor {
+    pub fn new(filename: String) -> Editor {
         let mut e = Editor {
             mode: Mode::Normal,
             // output: AlternateScreen::from(stdout().into_raw_mode().unwrap()),
@@ -55,14 +55,14 @@ impl Editor {
         self.reset_status();
     }
 
-    crate fn reset(&mut self) {
+    pub fn reset(&mut self) {
         self.buffer = vec![String::new()];
         self.set_mode(Mode::Normal);
         self.print(clear::All);
         self.goto(0, 0);
     }
 
-    crate fn reset_status(&mut self) {
+    pub fn reset_status(&mut self) {
         // Don't use save_pos here since it messes up the status
         let (prev_x, prev_y) = self.pos();
         let pos = (0, self.size().1 - 2);
@@ -73,18 +73,19 @@ impl Editor {
         self.goto(prev_x, prev_y);
     }
 
-    crate fn print<T: Display>(&mut self, item: T) {
+    pub fn print<T: Display>(&mut self, item: T) {
         write!(
             self.output,
             "{}{}{}",
             color::Bg(BG_COLOR_RGB),
             color::Fg(FG_COLOR_RGB),
             item
-        ).unwrap();
+        )
+        .unwrap();
         self.output.flush().unwrap();
     }
 
-    crate fn print_notice<T: Display>(&mut self, item: T) {
+    pub fn print_notice<T: Display>(&mut self, item: T) {
         self.save_pos();
         let pos = (0, self.size().1 - 1);
         self.goto(pos.0, pos.1);
@@ -93,7 +94,7 @@ impl Editor {
         self.restore_pos();
     }
 
-    crate fn set_mode(&mut self, mode: Mode) {
+    pub fn set_mode(&mut self, mode: Mode) {
         self.mode = mode;
         match self.mode {
             Mode::Command => self.setup_command_line(),
@@ -101,13 +102,13 @@ impl Editor {
         }
     }
 
-    crate fn size(&self) -> (usize, usize) {
+    pub fn size(&self) -> (usize, usize) {
         let (cols, rows) = terminal_size().unwrap();
         (cols as usize, rows as usize)
     }
 
     // TODO: Extract return values into a single DebugInfo type
-    crate fn debug_info(&self) -> (Vec<String>, (usize, usize), String, Vec<(usize, usize)>) {
+    pub fn debug_info(&self) -> (Vec<String>, (usize, usize), String, Vec<(usize, usize)>) {
         (
             self.buffer.clone(),
             self.size(),

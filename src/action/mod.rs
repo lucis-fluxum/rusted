@@ -1,4 +1,4 @@
-crate mod command;
-crate mod editing;
-crate mod filesystem;
-crate mod movement;
+pub mod command;
+pub mod editing;
+pub mod filesystem;
+pub mod movement;
